@@ -1,2 +1,91 @@
-@tailwind base;@tailwind components;@tailwind utilities;
-body{background:#FFF8F1;color:#0B2A55;font-family:system-ui,sans-serif}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: #FAF7F4;
+  color: #0B2A55;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 99px; }
+
+/* ── Leaflet overrides ─────────────────────────────── */
+.leaflet-container { font-family: 'Inter', system-ui, sans-serif; }
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(11,42,85,0.15);
+}
+
+/* ── Skeleton shimmer ─────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #f0ecea 25%, #e8e4e0 50%, #f0ecea 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 8px;
+}
+
+/* ── Bottom sheet backdrop ─────────────────────────── */
+.sheet-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(11,42,85,0.45);
+  backdrop-filter: blur(2px);
+  z-index: 50;
+}
+
+/* ── Progress ring ─────────────────────────────────── */
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+
+/* ── Timeline connector ────────────────────────────── */
+.timeline-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 26px;
+  width: 2px;
+  bottom: -8px;
+  background: #E5E7EB;
+}
+.timeline-step.done:not(:last-child)::after {
+  background: #16A34A;
+}
+
+/* ── Nav active indicator ──────────────────────────── */
+.nav-item.active .nav-icon {
+  color: #1A6FE0;
+}
+.nav-item.active .nav-label {
+  color: #1A6FE0;
+  font-weight: 600;
+}
+
+/* ── Countdown digits ──────────────────────────────── */
+.countdown-digit {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ── Card hover ────────────────────────────────────── */
+.card-hover {
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 4px 24px 0 rgba(11,42,85,0.12);
+  transform: translateY(-1px);
+}
+
+/* ── Safe area support ─────────────────────────────── */
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
