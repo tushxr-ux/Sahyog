@@ -12,6 +12,55 @@ import {
 
 const MapView = dynamic(() => import("./MapView"), { ssr: false });
 
+/* ── Install Banner (PWA) ────────────────────── */
+function InstallBanner() {
+  const [prompt, setPrompt] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [installed, setInstalled] = useState(false);
+
+  useEffect(() => {
+    // Check if already running as installed PWA
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+    const handler = e => { e.preventDefault(); setPrompt(e); setVisible(true); };
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', () => { setVisible(false); setInstalled(true); });
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  async function install() {
+    if (!prompt) return;
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    if (outcome === 'accepted') setVisible(false);
+  }
+
+  if (!visible || installed) return null;
+  return (
+    <div className="fixed bottom-20 left-4 right-4 lg:left-auto lg:right-6 lg:w-80 z-50 anim-slide-up">
+      <div className="card-base p-4 shadow-card-lg border border-orange-200 bg-white">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-brand rounded-2xl flex items-center justify-center flex-none shadow-orange">
+            <img src="/logo.png" alt="SAHYOG" className="w-8 h-8 object-contain" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-black text-navy">Install SAHYOG App</div>
+            <div className="text-xs text-muted mt-0.5">Add to your Home Screen for the best experience</div>
+          </div>
+          <button onClick={() => setVisible(false)}
+            className="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-muted hover:text-navy transition-colors flex-none" style={{minHeight:'auto'}}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <button onClick={install}
+          className="btn-cta mt-3 w-full py-2.5 text-sm rounded-xl">Install Now</button>
+      </div>
+    </div>
+  );
+}
+
 /* ── helpers ──────────────────────────────────── */
 const nowMin = () => { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); };
 const fmt = x => {
@@ -1087,9 +1136,11 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-cream">
+    <div className="flex bg-cream" style={{ minHeight: "100dvh" }}>
       <Sidebar active={page} set={setPage} onNotif={() => setNotif(true)} />
-      <main className="flex-1 min-w-0 pb-28 lg:pb-0">
+
+      {/* Main scroll container */}
+      <main className="flex-1 min-w-0 overflow-y-auto" style={{ paddingBottom: "6rem" }}>
         <MobileHeader onNotif={() => setNotif(true)} />
 
         {/* Desktop ticker */}
@@ -1101,8 +1152,10 @@ export default function App() {
           {pages[page] || pages.home}
         </div>
       </main>
+
       <BottomNav active={page} set={setPage} onNotif={() => setNotif(true)} />
       <NotifPanel open={notif} onClose={() => setNotif(false)} />
+      <InstallBanner />
     </div>
   );
 }

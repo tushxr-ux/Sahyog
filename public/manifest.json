@@ -1,0 +1,17 @@
+{
+  "name": "SAHYOG — Connecting Needs. Creating Impact.",
+  "short_name": "SAHYOG",
+  "description": "Community impact platform connecting food donors with NGOs across Mumbai.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffbf7",
+  "theme_color": "#F97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "screenshots": [],
+  "categories": ["social", "food", "community"],
+  "lang": "en"
+}
